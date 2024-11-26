@@ -1,136 +1,293 @@
-import React from 'react';
-import './ManagementS.css';
-import HeaderM from '../../../componentes/Management/Header/HeaderM';
-import SideBarNav from '../../../componentes/Management/SideBarNav/SideBarNav';
-import Navegation from '../../../componentes/Management/Navegation/Navegation';
-import filterIcon from '../../../assets/icons/filter.png'; // Add the filter icon path
-import StockChart from '../../../componentes/Management/Charts/StockChart';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import axios from 'axios';
+import './DashBoardSolds.css';
+import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
+import SalesChart from '../../../components/Charts/SalesChart/SalesChart'
+import Images from '../../../utils/Images/Images';
 
 const ManagementS = () => {
+  const [ventas, setVentas] = useState([]);
+  const [filteredVentas, setFilteredVentas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const { token } = useAuth();
+
+  // Estados para los filtros
+  const [estado, setEstado] = useState('');
+  const [minTotal, setMinTotal] = useState('');
+  const [maxTotal, setMaxTotal] = useState('');
+
+  const paths = [
+    { name: 'Dashboard', link: '/dashboard' },
+    { name: 'Ventas', link: '/ventas' },
+  ];
+
+  // Llamada a la API para traer las ventas
+  useEffect(() => {
+    const fetchVentas = async () => {
+      try {
+        const response = await axios.get('http://localhost:3002/api/ventas/all', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setVentas(response.data);
+        setFilteredVentas(response.data); // Inicializar los datos filtrados
+      } catch (err) {
+        setError('Error al cargar las ventas.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVentas();
+  }, [token]);
+
+  // Aplicar filtros a las ventas
+  useEffect(() => {
+    const applyFilters = () => {
+      let result = ventas;
+
+      // Filtrar por estado
+      if (estado) {
+        result = result.filter((venta) => venta.estado.toLowerCase() === estado.toLowerCase());
+      }
+
+      // Filtrar por rango de total
+      if (minTotal) {
+        result = result.filter((venta) => venta.total >= parseFloat(minTotal));
+      }
+      if (maxTotal) {
+        result = result.filter((venta) => venta.total <= parseFloat(maxTotal));
+      }
+
+      // Aplicar ordenamiento
+      if (sortConfig.key) {
+        result.sort((a, b) => {
+          const aVal = a[sortConfig.key];
+          const bVal = b[sortConfig.key];
+          if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+          return 0;
+        });
+      }
+
+      setFilteredVentas(result);
+    };
+
+    applyFilters();
+  }, [estado, minTotal, maxTotal, ventas, sortConfig]);
+
+  // Paginación dinámica
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentVentas = filteredVentas.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredVentas.length / itemsPerPage);
+
+  // Manejo del ordenamiento
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
   return (
     <div className='management-home'>
-      <HeaderM />
-      <Navegation />
-      <SideBarNav />
       <div className='main-management-home'>
+        <Breadcrumbs paths={paths} />
         <h2 className='main-management-home-title'>Historial de Ventas</h2>
-        
         <div className='management-solds-container'>
-        {/* Filter section */}
-        <div className="filter-section">
-          <div className='filter-container'>
-            <img src={filterIcon} alt='' className='filter-icon'></img>
-            <h4 className='filter-title'>Filtrar</h4>
-          </div>
-
-          <div className="filter-options">
-          <h5 className='filter-status-title'>Estado</h5>
-            <div className="filter-status">
-              <ul>
-                <li><input type="radio" name="status" /> Aprobado</li>
-                <li><input type="radio" name="status" /> Cancelado</li>
-                <li><input type="radio" name="status" /> Pendiente</li>
-                <li><input type="radio" name="status" /> En Proceso</li>
-              </ul>
+          {/* Sección de filtros */}
+          <div className="filter-section">
+            <div className='filter-container'>
+              <img src={Images.icons.blackfilter} alt='' className='filter-icon' />
+              <h4 className='filter-title'>Filtrar</h4>
             </div>
-          </div>
 
-          <div className="filter-options">
-            <div className="input-range">
-              <h5 className='filter-status-title'>Total</h5>
+            <div className="filter-options">
+              <h5 className='filter-status-title'>Estado</h5>
+              <div className="filter-status">
+                <ul>
+                  {['Confirmada', 'Cancelada', 'Pendiente', 'En Proceso'].map((item) => (
+                    <li key={item}>
+                      <input
+                        type="radio"
+                        name="status"
+                        value={item}
+                        checked={estado === item}
+                        onChange={(e) => setEstado(e.target.value)}
+                      />{' '}
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="filter-options">
+              <div className="input-range">
+                <h5 className='filter-status-title'>Total</h5>
                 <div>
-                  <input type="text" placeholder="Min" />
-                    <span>-</span>
-                  <input type="text" placeholder="Max" className='input-max'/>
+                  <input
+                    type="text"
+                    placeholder="Min"
+                    value={minTotal}
+                    onChange={(e) => setMinTotal(e.target.value)}
+                  />
+                  <span>-</span>
+                  <input
+                    type="text"
+                    placeholder="Max"
+                    value={maxTotal}
+                    onChange={(e) => setMaxTotal(e.target.value)}
+                    className='input-max'
+                  />
                 </div>
-            </div>
-
-            <div className="filter-status">
-              <p>De $0 a $100.00</p>
+              </div>
+              <div className="filter-status">
+                <p>
+                  De ${minTotal || 0} a ${maxTotal || '-'}
+                </p>
+              </div>
             </div>
           </div>
-    
+
+          {/* Sección de tabla */}
+          <div className="sales-history solds">
+            <table className="sales-history-table">
+              <thead>
+                <tr>
+                  {['Id', 'Fecha', 'Cliente', 'Total', 'Estado'].map((col) => (
+                    <th key={col} onClick={() => handleSort(col.toLowerCase())}>
+                      {col}{' '}
+                      {sortConfig.key === col.toLowerCase() &&
+                        (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                    </th>
+                  ))}
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="6">Cargando...</td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td colSpan="6">{error}</td>
+                  </tr>
+                ) : currentVentas.length > 0 ? (
+                  currentVentas.map((venta) => (
+                    <tr key={venta.id_venta}>
+                      <td>{venta.id_venta}</td>
+                      <td>{new Date(venta.fecha).toLocaleDateString()}</td>
+                      <td>{venta.correo}</td>
+                      <td>${venta.total.toLocaleString('es-CO')}</td>
+                      <td>
+                        <span
+                          className={`status ${
+                            venta.estado.toLowerCase().replace(' ', '-')
+                          }`}
+                        >
+                          {venta.estado.toLowerCase()}
+                        </span>
+                      </td>
+                      <td>
+                        <a href={`#detalles-${venta.id_venta}`}>Más detalles</a>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6">No hay ventas que coincidan con los filtros.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+
+            {/* Paginación */}
+            <div className="pagination">
+              <div className='pagination-input'>
+                <span>Mostrar las ventas</span>
+                <input
+                  type="number"
+                  min="1"
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(parseInt(e.target.value) || 1)}
+                  placeholder="10"
+                />
+              </div>
+              <span>
+                Mostrando {indexOfFirstItem + 1} a{' '}
+                {Math.min(indexOfLastItem, filteredVentas.length)} de{' '}
+                {filteredVentas.length} ventas
+              </span>
+              <div className='pagination-button__container'>
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  Anterior
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i + 1}
+                    className={currentPage === i + 1 ? 'active' : ''}
+                    onClick={() => setCurrentPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        {/* Table section */}
-        <div className="sales-history solds">
-  <table className="sales-history-table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Fecha</th>
-        <th>Cliente</th>
-        <th>Total</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Oct 7, 2024</td>
-        <td>John Doe</td>
-        <td>$100</td>
-        <td><span className="status approved">Aceptada</span></td>
-        <td><a href="#">Más detalles </a></td>
-      </tr>
-    </tbody>
-  </table>
-  <div className="pagination">
-    <div className='pagination-input'>
-      <span>Mostrar las ventas</span>
-      <input placeholder='10'></input>
-    </div>
-    <span>Mostrando del 1 al 10 de 50 ventas</span>
-    <div className='pagination-button__container'>
-      <button>Anterior</button>
-      <div className='pagination-number'>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      </div>
-      <button>Siguiente</button>
-    </div>
-  </div>
-</div>
-</div>
 
-
-        {/* Statistics section */}
+        {/* Sección de estadísticas */}
         <div className="statistics-section">
           <h3 className='main-management-home-title'>Estadísticas</h3>
-
           <div className="statistics-container">
             <div className="statistics-solds-card">
               <h4>Ventas</h4>
-              <span className="statistics-value">1231</span>
-              <StockChart />
+              <span className="statistics-value">{filteredVentas.length}</span>
+
             </div>
-
-
             <div className="statistics-comparison">
               <h3 className='main-management-home-title'>Comparar</h3>
-              
               <div className='statistics-comparision__container'>
-              <div className="statistics-box">
-                <h5>Septiembre 09/2024</h5>
-                <p>1239</p>
-                <span>Promedio por día</span>
-                <p>24</p>
+                <div className="statistics-box">
+                  <h5>Septiembre 09/2024</h5>
+                  <p>1239</p>
+                  <span>Promedio por día</span>
+                  <p>24</p>
+                </div>
+                <div className="statistics-box">
+                  <h5>Octubre 10/2024</h5>
+                  <p>1321</p>
+                  <span>Promedio por día</span>
+                  <p>24</p>
+                </div>
               </div>
-
-              <div className="statistics-box">
-                <h5>Octubre 10/2024</h5>
-                <p>1321</p>
-                <span>Promedio por día</span>
-                <p>24</p>
-              </div>
-              </div>
-
               <div className="growth-info">
-              <p>Crecimiento de <span className="growth-positive">+2%</span> respecto a septiembre.</p>
+                <p>
+                  Crecimiento de{' '}
+                  <span className="growth-positive">+2%</span> respecto a septiembre.
+                </p>
               </div>
-
             </div>
           </div>
         </div>

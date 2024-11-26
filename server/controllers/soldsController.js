@@ -132,8 +132,58 @@ const ventasController = {
     
             res.status(200).json(ventasAgrupadas);
         });
-    }
+    },
     
+    getAllVentas: (req, res) => {
+        const query = `
+            SELECT 
+                v.id_venta, v.fecha, v.total, v.estado, v.correo, v.id_usuarios,
+                dv.id_producto, dv.cantidad, dv.precio_Unitario, dv.metodo_pago, dv.id_metodo_pago
+            FROM ventas v
+            INNER JOIN detalles_de_ventas dv ON v.id_venta = dv.id_venta
+            ORDER BY v.fecha DESC
+        `;
+
+        db.query(query, (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error al obtener todas las ventas', detalles: err });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron ventas en el sistema.' });
+            }
+
+            // Agrupar ventas y sus detalles
+            const ventasAgrupadas = results.reduce((acc, row) => {
+                const ventaExistente = acc.find(v => v.id_venta === row.id_venta);
+                const detalle = {
+                    id_producto: row.id_producto,
+                    cantidad: row.cantidad,
+                    precio_Unitario: row.precio_Unitario,
+                    metodo_pago: row.metodo_pago,
+                    id_metodo_pago: row.id_metodo_pago
+                };
+
+                if (ventaExistente) {
+                    ventaExistente.detalles.push(detalle);
+                } else {
+                    acc.push({
+                        id_venta: row.id_venta,
+                        fecha: row.fecha,
+                        total: row.total,
+                        estado: row.estado,
+                        correo: row.correo,
+                        id_usuarios: row.id_usuarios,
+                        detalles: [detalle]
+                    });
+                }
+
+                return acc;
+            }, []);
+
+            res.status(200).json(ventasAgrupadas);
+        });
+    }
 
 };
 

@@ -220,7 +220,7 @@ const Login = () => {
                             {errorMessage && <p className="error-message">{errorMessage}</p>}
                             <button type="submit" className='login-button'>Entrar</button>
                             <p>
-                                <Link to="/restablecer-contraseña">¿Olvidaste tu contraseña?</Link>
+                                <Link to="/RecoverPassword">¿Olvidaste tu contraseña?</Link>
                             </p>
                         </form>
                     )}

@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');  // Importa jsonwebtoken
-const db = require('../config/conexion');  // Tu conexión a la base de datos
+// tokenModel.js
+const db = require('../config/conexion'); // Asegúrate de que tu conexión a la base de datos esté configurada aquí.
 
 const insertToken = (userId, token, expiresAt) => {
     return new Promise((resolve, reject) => {
@@ -11,33 +11,21 @@ const insertToken = (userId, token, expiresAt) => {
     });
 };
 
-// Verificar el token
 const verifyToken = (token) => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM tokens_usuarios WHERE token = ?';
-        db.query(query, [token], (error, results) => {  // Cambiar 'connection.query' por 'db.query'
+        db.query(query, [token], (error, results) => {
             if (error) return reject(error);
             if (results.length > 0) {
-                resolve(results[0]);  // Token encontrado
+                resolve(results[0]);
             } else {
-                resolve(null);  // Token no encontrado
+                resolve(null); // Token no encontrado
             }
         });
     });
 };
 
-// Nueva función para decodificar el token y obtener los datos del usuario
-const getTokenData = async (token) => {
-    try {
-        console.log('Clave secreta JWT:', process.env.JWT_SECRET);  // Verifica que la clave sea la correcta
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return decoded;
-    } catch (error) {
-        console.error('Error al verificar el token:', error.message);
-        return null;
-    }
-};
-
+// Nueva función para eliminar un token
 const deleteToken = (token) => {
     return new Promise((resolve, reject) => {
         const query = 'DELETE FROM tokens_usuarios WHERE token = ?';
@@ -50,7 +38,7 @@ const deleteToken = (token) => {
 
 const deleteTokenById = (tokenId) => {
     return new Promise((resolve, reject) => {
-        const query = 'DELETE FROM tokens_usuarios WHERE id_token = ?';
+        const query = 'DELETE FROM tokens_usuarios WHERE id_token = ?'; // Asegúrate de que el nombre de la columna sea correcto
         db.query(query, [tokenId], (error, results) => {
             if (error) return reject(error);
             resolve(results);
@@ -58,15 +46,5 @@ const deleteTokenById = (tokenId) => {
     });
 };
 
-// Función para invalidar el token (cerrar sesión)
-const invalidateToken = (token) => {
-    return new Promise((resolve, reject) => {
-        const query = 'DELETE FROM tokens_usuarios WHERE token = ?';
-        db.query(query, [token], (error, results) => {
-            if (error) return reject(error);
-            resolve(results);
-        });
-    });
-};
 
-module.exports = { insertToken, verifyToken, getTokenData, deleteToken, deleteTokenById, invalidateToken };
+module.exports = { insertToken, verifyToken, deleteToken, deleteTokenById }; // Asegúrate de exportar la nueva función

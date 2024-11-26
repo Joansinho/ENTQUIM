@@ -17,6 +17,7 @@ npm install axios
 npm install react-toastify
 npm install react-icons
 npm install chart.js
+npm install react-chartjs-2
 npm install dotenv 
 npm install @mui/material @emotion/react @emotion/styled
 npm install react-datepicker

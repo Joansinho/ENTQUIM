@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Importamos axios
-import './ManagementP.css';
-import HeaderM from '../../../componentes/Management/Header/HeaderM';
-import SideBarNav from '../../../componentes/Management/SideBarNav/SideBarNav';
-import Navegation from '../../../componentes/Management/Navegation/Navegation';
-import filterIcon from '../../../assets/icons/filter.png';
+import './DashBoardProducts.css';
+import Images from '../../../utils/Images/Images';
+import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
 
 const ManagementP = () => {
     const [productos, setProductos] = useState([]);  // Estado para almacenar todos los productos
-    const [productosFiltrados, setProductosFiltrados] = useState([]);  // Productos para mostrar en la página actual
+    const [productosFiltrados, setProductosFiltrados] = useState([]);  // Productos filtrados
+    const [loading, setLoading] = useState(true);  // Estado de carga
+    const [error, setError] = useState(null);  // Estado de error
     const [paginaActual, setPaginaActual] = useState(1);  // Estado para la página actual
     const [productosPorPagina, setProductosPorPagina] = useState(10);  // Número de productos por página
     const [columnaOrden, setColumnaOrden] = useState(''); // Columna por la que se ordenará
     const [ordenAscendente, setOrdenAscendente] = useState(true); // Estado para controlar el orden (ascendente/descendente)
     const [filtroStock, setFiltroStock] = useState('');  // Estado para el filtro de stock
+    const [filtroCategoria, setFiltroCategoria] = useState(''); // Estado para el filtro de categoría
+    const paths = [
+        { name: 'Dashboard', link: '/dashboard' },
+        { name: 'Productos', link: '/productos' }
+    ];
 
     // Llamada a la API para obtener los productos
     useEffect(() => {
-        axios.get('http://localhost:3002/api/productos')  // Ajusta la URL según tu configuración
-            .then((response) => {
-                setProductos(response.data);  // Almacenamos los productos en el estado
-            })
-            .catch((error) => {
-                console.error('Error al obtener los productos:', error);
-            });
+        const fetchProductos = async () => {
+            try {
+                const response = await axios.get('http://localhost:3002/api/productos'); // Ajusta la URL según tu configuración
+                setProductos(response.data);
+                setProductosFiltrados(response.data); // Inicializamos con todos los productos
+            } catch (err) {
+                setError('Error al obtener los productos.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProductos();
     }, []);
 
     // Función para acortar la descripción si es demasiado larga
@@ -38,68 +49,67 @@ const ManagementP = () => {
         setOrdenAscendente(nuevaOrdenAscendente);
     };
 
-    // Función para realizar la comparación y ordenar
-    const ordenarPorColumna = (productos, columna, ascendente) => {
-        return productos.sort((a, b) => {
-            const valorA = a[columna];
-            const valorB = b[columna];
+    // Obtener productos ordenados
+    const obtenerProductosOrdenados = () => {
+        if (!columnaOrden) return productosFiltrados;
+
+        return [...productosFiltrados].sort((a, b) => {
+            const valorA = a[columnaOrden];
+            const valorB = b[columnaOrden];
             if (typeof valorA === 'string') {
-                return ascendente
+                return ordenAscendente
                     ? valorA.localeCompare(valorB)
                     : valorB.localeCompare(valorA);
             } else {
-                return ascendente ? valorA - valorB : valorB - valorA;
+                return ordenAscendente ? valorA - valorB : valorB - valorA;
             }
         });
     };
 
-    // Función para obtener el estado del stock
+    // Obtener estado del stock
     const obtenerEstadoStock = (stock) => {
         if (stock > 10) return 'Disponible';
         if (stock > 0 && stock <= 10) return 'Bajo';
         return 'No disponible';
     };
 
-    // Filtrar productos según el filtro de stock y aplicar la ordenación
+    // Filtrar y ordenar productos según el filtro de stock
     useEffect(() => {
-        const productosFiltradosPorStock = productos.filter((producto) => {
-            const estadoStock = obtenerEstadoStock(producto.stock);
-            return filtroStock ? estadoStock === filtroStock : true;  // Filtrar según el estado seleccionado
-        });
+        const aplicarFiltros = () => {
+            let result = productos;
+    
+            // Filtrar por estado de stock
+            if (filtroStock) {
+                result = result.filter((producto) => obtenerEstadoStock(producto.stock) === filtroStock);
+            }
+    
+            // Filtrar por categoría
+            if (filtroCategoria) {
+                result = result.filter((producto) => producto.id_categoria === parseInt(filtroCategoria));
+            }
+    
+            setProductosFiltrados(result);
+        };
+    
+        aplicarFiltros();
+    }, [filtroStock, filtroCategoria, productos]);
+    
 
-        const indiceUltimoProducto = paginaActual * productosPorPagina;
-        const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
-        const productosOrdenados = ordenarPorColumna([...productosFiltradosPorStock], columnaOrden, ordenAscendente);
-        setProductosFiltrados(productosOrdenados.slice(indicePrimerProducto, indiceUltimoProducto));
-    }, [paginaActual, productosPorPagina, productos, columnaOrden, ordenAscendente, filtroStock]);
+    // Paginación dinámica
+    const indexOfLastItem = paginaActual * productosPorPagina;
+    const indexOfFirstItem = indexOfLastItem - productosPorPagina;
+    const productosActuales = obtenerProductosOrdenados().slice(indexOfFirstItem, indexOfLastItem);
+    const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
 
     // Manejar cambio de página
     const cambiarPagina = (numeroPagina) => {
         setPaginaActual(numeroPagina);
     };
 
-    // Manejar cambio de productos por página
-    const cambiarProductosPorPagina = (e) => {
-        const cantidad = Number(e.target.value);
-        setProductosPorPagina(cantidad > 0 ? cantidad : 10); // Mínimo 1 producto
-        setPaginaActual(1); // Reiniciar a la primera página
-    };
-
-    // Manejar el cambio del filtro de stock
-    const manejarFiltroStock = (estado) => {
-        setFiltroStock(estado);
-        setPaginaActual(1); 
-    };
-
-    const totalPaginas = Math.ceil(productos.length / productosPorPagina);
-
     return (
         <div className='management-products'>  
-            <HeaderM />
-            <SideBarNav />
-            <Navegation />
-
             <div className='main-management-home'>
+                <Breadcrumbs paths={paths}></Breadcrumbs>
                 <h2 className='main-management-home-title'>Productos</h2>
 
                 <div className='management-products-container'>
@@ -107,7 +117,7 @@ const ManagementP = () => {
                     <div className="filter-section">
                         <button className='register-user-button'>Añadir un nuevo producto</button>
                         <div className='filter-container'>
-                            <img src={filterIcon} alt='' className='filter-icon'></img>
+                            <img src={Images.icons.blackfilter} alt='' className='filter-icon'></img>
                             <h4 className='filter-title'>Filtrar</h4>
                         </div>
 
@@ -115,23 +125,48 @@ const ManagementP = () => {
                             <h5 className='filter-status-title'>Stock</h5>
                             <div className="filter-status">
                                 <ul>
-                                    <li><input type="radio" name="stock" onChange={() => manejarFiltroStock('Disponible')} /> Disponible</li>
-                                    <li><input type="radio" name="stock" onChange={() => manejarFiltroStock('Bajo')} /> Bajo</li>
-                                    <li><input type="radio" name="stock" onChange={() => manejarFiltroStock('No disponible')} /> No disponible</li>
+                                    <li><input type="radio" name="stock" onChange={() => setFiltroStock('Disponible')} /> Disponible</li>
+                                    <li><input type="radio" name="stock" onChange={() => setFiltroStock('Bajo')} /> Bajo</li>
+                                    <li><input type="radio" name="stock" onChange={() => setFiltroStock('No disponible')} /> No disponible</li>
                                 </ul>
                             </div>
                         </div>
-                        {/* <div className="filter-options">
-                            <h5 className='filter-status-title'>Categoria</h5>
+
+                        <div className="filter-options">
+                            <h5 className='filter-status-title'>Categoría</h5>
                             <div className="filter-status">
                                 <ul>
-                                    <li><input type="radio" name="status" /> Insectos</li>
-                                    <li><input type="radio" name="status" /> Roedores </li>
-                                    <li><input type="radio" name="status" /> Murciélagos </li>
-                                    <li><input type="radio" name="status" /> Larvas </li>
+                                    <li>
+                                        <input
+                                            type="radio"
+                                            name="categoria"
+                                            onChange={() => setFiltroCategoria('1')} // ID de Insectos
+                                        /> Insectos
+                                    </li>
+                                    <li>
+                                        <input
+                                            type="radio"
+                                            name="categoria"
+                                            onChange={() => setFiltroCategoria('2')} // ID de Roedores
+                                        /> Roedores
+                                    </li>
+                                    <li>
+                                        <input
+                                            type="radio"
+                                            name="categoria"
+                                            onChange={() => setFiltroCategoria('3')} // ID de Murciélagos
+                                        /> Murciélagos
+                                    </li>
+                                    <li>
+                                        <input
+                                            type="radio"
+                                            name="categoria"
+                                            onChange={() => setFiltroCategoria('4')} // ID de Larvas
+                                        /> Larvas
+                                    </li>
                                 </ul>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                     
                     {/* Product table */}
@@ -158,17 +193,27 @@ const ManagementP = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* Mapeamos los productos filtrados según la página actual */}
-                                {productosFiltrados.length > 0 ? productosFiltrados.map((producto) => (
-                                    <tr key={producto.id_producto}>
-                                        <td>{producto.id_producto}</td>
-                                        <td>{producto.nombre}</td>
-                                        <td>{acortarDescripcion(producto.descripcion)}</td>
-                                        <td>${producto.precio.toFixed(3)}</td>
-                                        <td>{obtenerEstadoStock(producto.stock)}</td> {/* Mostramos el estado del stock */}
-                                        <td><a href="#">Más detalles</a></td>
+                                {/* Mostrar productos actuales */}
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="6">Cargando...</td>
                                     </tr>
-                                )) : (
+                                ) : error ? (
+                                    <tr>
+                                        <td colSpan="6">{error}</td>
+                                    </tr>
+                                ) : productosActuales.length > 0 ? (
+                                    productosActuales.map((producto) => (
+                                        <tr key={producto.id_producto}>
+                                            <td>{producto.id_producto}</td>
+                                            <td>{producto.nombre}</td>
+                                            <td>{acortarDescripcion(producto.descripcion)}</td>
+                                            <td>${producto.precio.toLocaleString('es-CO')}</td>
+                                            <td>{obtenerEstadoStock(producto.stock)}</td>
+                                            <td><a href="#">Más detalles</a></td>
+                                        </tr>
+                                    ))
+                                ) : (
                                     <tr>
                                         <td colSpan="6">No se encontraron productos</td>
                                     </tr>
@@ -176,36 +221,41 @@ const ManagementP = () => {
                             </tbody>
                         </table>
 
+                        {/* Paginación */}
                         <div className="pagination">
                             <div className='pagination-input'>
                                 <span>Mostrar los productos</span>
-                                <input 
-                                    placeholder={productosPorPagina} 
-                                    className=''
-                                    onChange={cambiarProductosPorPagina}  // Cambiar productos por página
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={productosPorPagina}
+                                    onChange={(e) => setProductosPorPagina(parseInt(e.target.value) || 1)}
+                                    placeholder="10"
                                 />
                             </div>
-                            <span>Mostrando del {(paginaActual - 1) * productosPorPagina + 1} al {Math.min(paginaActual * productosPorPagina, productos.length)} de {productos.length} productos</span>
+                            <span>Mostrando {indexOfFirstItem + 1} a {Math.min(indexOfLastItem, productosFiltrados.length)} de {productosFiltrados.length} productos</span>
                             <div className='pagination-button__container'>
-                                <button 
-                                    onClick={() => cambiarPagina(paginaActual - 1)} 
+                                <button
+                                    onClick={() => cambiarPagina(Math.max(paginaActual - 1, 1))}
                                     disabled={paginaActual === 1}
-                                >Anterior</button>
-                                <div className='pagination-number'>
-                                    {[...Array(totalPaginas).keys()].map(num => (
-                                        <button 
-                                            key={num + 1} 
-                                            onClick={() => cambiarPagina(num + 1)}
-                                            className={paginaActual === num + 1 ? 'active' : ''}
-                                        >
-                                            {num + 1}
-                                        </button>
-                                    ))}
-                                </div>
-                                <button 
-                                    onClick={() => cambiarPagina(paginaActual + 1)} 
+                                >
+                                    Anterior
+                                </button>
+                                {Array.from({ length: totalPaginas }, (_, i) => (
+                                    <button
+                                        key={i + 1}
+                                        className={paginaActual === i + 1 ? 'active' : ''}
+                                        onClick={() => cambiarPagina(i + 1)}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => cambiarPagina(Math.min(paginaActual + 1, totalPaginas))}
                                     disabled={paginaActual === totalPaginas}
-                                >Siguiente</button>
+                                >
+                                    Siguiente
+                                </button>
                             </div>
                         </div>
                     </div>

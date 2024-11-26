@@ -7,25 +7,32 @@ import Images from '../../../utils/Images/Images';
 
 const AccountModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
-    const { user, handleLogout } = useAuth(); // Usa handleLogout del contexto
+    const { user, handleLogout } = useAuth();
 
     const isAuthenticated = !!localStorage.getItem('token');
 
     const handleLogoutClick = () => {
         console.log('Cerrando sesión desde el modal');
-        handleLogout(); // Llama a la función de logout del contexto
+        handleLogout();
         toast.info('Has cerrado sesión exitosamente.', {
-            autoClose: 1000, // Duración de la alerta en milisegundos
-            pauseOnHover: false, // Evita que la alerta se pause al pasar el ratón
-            draggable: false, // Evita que se pueda arrastrar la alerta
+            autoClose: 1000,
+            pauseOnHover: false,
+            draggable: false,
         }); 
-        onClose(); // Cierra el modal
+        onClose();
     };
 
     const handleManageAccount = () => {
         onClose();
         navigate('/gestion-cuenta');
     };
+
+    const handleDashboardAccess = () => {
+        onClose();
+        navigate('/dashboard/inicio');
+    };
+
+    const canAccessDashboard = user?.id_rol === 1 || user?.id_rol === 2;
 
     return (
         <div className={`account-modal ${isOpen ? 'show' : ''}`}>
@@ -36,27 +43,31 @@ const AccountModal = ({ isOpen, onClose }) => {
                         <p className="account-mail">{user?.correo || 'No disponible'}</p>
                         <div className="account-management">
                             <div className="management">
-                            <button className="manage-button" onClick={handleManageAccount}>
-                                Ir a Gestionar Cuenta
-                            </button>
+                                <button className="manage-button" onClick={handleManageAccount}>
+                                    Ir a Gestionar Cuenta
+                                </button>
+                                {canAccessDashboard && (
+                                    <button className="manage-button" onClick={handleDashboardAccess}>
+                                        Dashboard
+                                    </button>
+                                )}
                             </div>
-                            
                             <div className='modal-logout-container'>
-                            <button className="logout-button" onClick={handleLogoutClick}>
-                                Cerrar sesión
-                                <img src={Images.icons.redlogout}
-                                     className='modal-logout-button'
-                                     alt=''
-                                     title=''
-                                ></img>
-                            </button>
+                                <button className="logout-button" onClick={handleLogoutClick}>
+                                    Cerrar sesión
+                                    <img src={Images.icons.redlogout}
+                                         className='modal-logout-button'
+                                         alt=''
+                                         title=''
+                                    ></img>
+                                </button>
                             </div>
                         </div>
                     </>
                 ) : (
                     <div className='login-prompt-container'>
                         <h2 className="login-prompt">¡No has iniciado sesión!</h2>
-                        <p>Inicia sesión o Registrate para hacer tu compra.</p>
+                        <p>Inicia sesión o Regístrate para hacer tu compra.</p>
                         <button className="login-button-modal" onClick={() => {
                             onClose();
                             navigate('/Iniciar-Sesion');

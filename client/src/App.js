@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Importación de páginas.
 import Layout from './components/Layout/Layout';
+import AccountLayout from './components/AccountLayout/AccountLayout';
 import ManagementLayout from './components/ManagementLayout/ManagementLayout';
 import Home from './pages/Home/Home';
 import AboutUs from './pages/Us/AboutUs';
@@ -20,10 +21,14 @@ import Methods from './pages/Methods/Methods';
 import Orders from './pages/Orders/Orders';
 import AddMethodForm from './pages/AddMethodForm/AddMethodForm';
 import CartPage from './pages/CartPage/CartPage';
+
+import DashBoardHome from './pages/Dashboard/Home/DashBoardHome';
+import DashBoardSolds from './pages/Dashboard/Solds/DashBoardSolds';
+import DashBoardProducts from './pages/Dashboard/Products/DashBoardProducts';
+import DashboardUsers from './pages/Dashboard/Users/DashBoardUsers';
+
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
-import ChangePassword from './pages/ChangePassword/ChangePassword';
 
 // Componente para manejar la barra de carga
 function LoadingBarWrapper({ children }) {
@@ -64,14 +69,18 @@ function App() {
                             <Route path='/Iniciar-Sesion' exact element={<Layout><Login /></Layout>} />
                             <Route path='/Productos/Todos' exact element={<Layout><AllProducts /></Layout>} />
                             <Route path='/Carrito' exact element={<Layout><CartPage /></Layout>} />
-                            <Route path='/gestion-cuenta' exact element={<ManagementLayout><AccountInfo /></ManagementLayout>} />
-                            <Route path='/gestion-cuenta/mi-cuenta' exact element={<ManagementLayout><AccountInfo /></ManagementLayout>} />
-                            <Route path='/gestion-cuenta/pagos' exact element={<ManagementLayout><Methods /></ManagementLayout>} />
-                            <Route path='/gestion-cuenta/mis-ordenes' exact element={<ManagementLayout><Orders /></ManagementLayout>} />
-                            <Route path='/gestion-cuenta/pagos/nuevo-metodo' exact element={<ManagementLayout><AddMethodForm /></ManagementLayout>} />
-                            <Route path='/restablecer-contraseña' exact element={<Layout><ResetPasswordPage /></Layout>} />
-                            <Route path='/actualizar-contraseña' exact element={<Layout><ChangePassword /></Layout>} />
-                         </Routes>
+                            <Route path='/gestion-cuenta' exact element={<AccountLayout><AccountInfo /></AccountLayout>} />
+                            <Route path='/gestion-cuenta/mi-cuenta' exact element={<AccountLayout><AccountInfo /></AccountLayout>} />
+                            <Route path='/gestion-cuenta/pagos' exact element={<AccountLayout><Methods /></AccountLayout>} />
+                            <Route path='/gestion-cuenta/mis-ordenes' exact element={<AccountLayout><Orders /></AccountLayout>} />
+                            <Route path='/gestion-cuenta/pagos/nuevo-metodo' exact element={<AccountLayout><AddMethodForm /></AccountLayout>} />
+
+                            <Route path='/dashboard/inicio' exact element={<ManagementLayout><DashBoardHome /></ManagementLayout>} />
+                            <Route path='/dashboard/ventas' exact element={<ManagementLayout><DashBoardSolds /></ManagementLayout>} />
+                            <Route path='/dashboard/productos' exact element={<ManagementLayout><DashBoardProducts /></ManagementLayout>} />
+                            <Route path='/dashboard/usuarios' exact element={<ManagementLayout><DashboardUsers /></ManagementLayout>} />
+
+                        </Routes>
                     </LoadingBarWrapper>
                 </CartProvider>
             </AuthProvider>

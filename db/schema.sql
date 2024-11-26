@@ -65,6 +65,7 @@ CREATE TABLE Usuarios (
     fecha_nacimiento DATE,
     telefono VARCHAR (15),
     direccion VARCHAR (100),
+    creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_rol INT,
     FOREIGN KEY (id_rol) REFERENCES Roles(id_rol) ON DELETE SET NULL
 );
@@ -108,15 +109,15 @@ CREATE TABLE Detalles_De_Ventas (
     id_detalle_venta INT AUTO_INCREMENT PRIMARY KEY,
     id_producto INT,
     id_venta INT,
-    id_metodo_pago INT NULL AFTER metodo_pago,
     cantidad INT,
     precio_Unitario DECIMAL(10, 2),
-    metodo_pago ENUM('CONTRA_ENTREGA', 'TARJETA') NOT NULL AFTER precio_Unitario,
-
+    metodo_pago ENUM('CONTRA_ENTREGA', 'TARJETA') NOT NULL,
+    id_metodo_pago INT NULL,
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto) ON DELETE CASCADE,
     FOREIGN KEY (id_venta) REFERENCES Ventas(id_venta) ON DELETE CASCADE,
-    FOREIGN KEY (id_metodo_pago) REFERENCES Metodos_Pago(id_metodo_pago) ON DELETE SET NULL;
+    FOREIGN KEY (id_metodo_pago) REFERENCES Metodos_Pago(id_metodo_pago) ON DELETE SET NULL
 );
+
 
 CREATE TABLE Movimientos_Ventas (
     id_movimiento INT AUTO_INCREMENT PRIMARY KEY,

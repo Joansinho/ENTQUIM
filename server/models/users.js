@@ -60,27 +60,6 @@ class Usuario {
             callback(null, results);
         });
     }
-    
-    // Actualizar contraseña del usuario
-    static async updatePassword(correo, nuevaContrasena, callback) {
-        try {
-            // Encriptar la nueva contraseña
-            const hashedPassword = await bcrypt.hash(nuevaContrasena, 10);
-
-            // Actualizar la contraseña en la base de datos
-            const query = 'UPDATE Usuarios SET contrasena = ? WHERE correo = ?';
-            db.query(query, [hashedPassword, correo], (err, results) => {
-                if (err) return callback(err, null);
-                if (results.affectedRows === 0) {
-                    return callback(null, 'El correo no está registrado o no se encuentra.');
-                }
-                callback(null, 'Contraseña actualizada con éxito.');
-            });
-        } catch (error) {
-            console.error('Error al actualizar la contraseña:', error);
-            callback(error, null);
-        }
-    }
 }
 
 module.exports = Usuario;

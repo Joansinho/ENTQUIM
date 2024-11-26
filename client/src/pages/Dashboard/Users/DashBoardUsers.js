@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './ManagementU.css';
-import HeaderM from '../../../componentes/Management/Header/HeaderM';
-import SideBarNav from '../../../componentes/Management/SideBarNav/SideBarNav';
-import Navegation from '../../../componentes/Management/Navegation/Navegation';
-import StockChart from '../../../componentes/Management/Charts/StockChart'; // Gráfico de stock
-import filterIcon from '../../../assets/icons/filter.png'; 
+import './DashBoardUsers.css';
+// import StockChart from '../../../componentes/Management/Charts/StockChart';
+import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs'; 
+import Images from '../../../utils/Images/Images';
 import { useAuth } from '../../../context/AuthContext'; // Importa el contexto de autenticación
 
 const ManagementU = () => {
     const { user } = useAuth(); // Obtén el usuario logueado
     const [usuarios, setUsuarios] = useState([]);
     const [filtroEstado, setFiltroEstado] = useState(''); // Estado para el filtro de estado
+    const paths = [
+        { name: 'Dashboard', link: '/dashboard' },
+        { name: 'Usuarios', link: '/usuarios' }
+      ];
 
     // Obtener los usuarios desde la API
     useEffect(() => {
@@ -33,40 +35,38 @@ const ManagementU = () => {
     });
 
     // Función para obtener el nombre del rol
-    const getRolNombre = (id_rol) => {
-        switch (id_rol) {
-            case 1:
-                return 'Administrador';
-            case 2:
-                return 'Empleado';
-            case 3:
-                return 'Cliente';
-            default:
-                return 'Desconocido';
-        }
-    };
+    // const getRolNombre = (id_rol) => {
+    //     switch (id_rol) {
+    //         case 1:
+    //             return 'Administrador';
+    //         case 2:
+    //             return 'Empleado';
+    //         case 3:
+    //             return 'Cliente';
+    //         default:
+    //             return 'Desconocido';
+    //     }
+    // };
 
     return (
         <div className='users-management'>
-            <HeaderM />
-            <Navegation />
-            <SideBarNav />
             <div className='main-management-home'>
+                <Breadcrumbs paths={paths}></Breadcrumbs>
                 <h2 className='main-management-home-title'>Usuarios</h2>
 
                 <div className='management-products-container'>
                     {/* Mostrar solo el rol del usuario logueado */}
                     <div className='current-role'>
-                        <h4>Rol actual: {getRolNombre(user.id_rol)}</h4>
+                        {/* <h4>Rol actual: {getRolNombre(user.id_rol)}</h4> */}
                     </div>
 
                     {/* Botón para añadir usuario solo para administradores */}
-                    {user.id_rol === 1 && (
+                    {/* {user.id_rol === 1 && (
                         <button className='register-user-button'>Añadir un nuevo usuario</button>
-                    )}
+                    )} */}
                     
                     <div className='filter-container'>
-                        <img src={filterIcon} alt='' className='filter-icon' />
+                        <img src={Images.icons.blackfilter} alt='' className='filter-icon' />
                         <h4 className='filter-title'>Filtrar</h4>
                     </div>
 
@@ -143,7 +143,7 @@ const ManagementU = () => {
                                     <td>{usuario.id_usuarios}</td>
                                     <td>{usuario.nombre} {usuario.apellido}</td>
                                     <td>{usuario.correo}</td>
-                                    <td>{getRolNombre(usuario.id_rol)}</td>
+                                    {/* <td>{getRolNombre(usuario.id_rol)}</td> */}
                                     <td>{usuario.estado}</td>
                                     <td><a href="#">Más detalles</a></td>
                                 </tr>
@@ -157,7 +157,7 @@ const ManagementU = () => {
             <div className="statistics-users-container">
                 <div className="growth-users-rate">
                     <h3>Tasa de crecimiento</h3>
-                    <StockChart /> {/* Gráfico de línea de crecimiento */}
+                    {/* <StockChart />  */}
                 </div>
 
                 <div className="stats-row statistics-users">

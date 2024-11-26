@@ -36,10 +36,4 @@ router.post('/verificar-contrasena', authMiddleware, userController.verifyPasswo
 // ruta para actualizar informacion del usuario autenticado
 router.put('/actualizar', authMiddleware, userController.updateUser);
 
-//Ruta para cambiar la contraseña
-router.put('/actualizar-contrasena', userController.updatePassword);
-
-// solicitar correo para cambiar la contraseña
-router.post('/solicitar-correo', userController.requestPasswordChange)
-
 module.exports = router;

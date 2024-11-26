@@ -88,7 +88,7 @@ const Products = () => {
                                         />
                                     </Link>
                                     <h4 className='product-container__title'>{producto.nombre}</h4>
-                                    <p className='product-container__price'>${producto.precio.toFixed(3)} COP</p>
+                                    <p className='product-container__price'>${producto.precio.toLocaleString('es-CO')} COP</p>
                                     <button className='product-container__add-product' onClick={() => handleAddToCart(producto)}>
                                         Añadir al carrito
                                     </button>

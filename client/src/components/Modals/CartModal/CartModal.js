@@ -61,7 +61,7 @@ const CartModal = ({ isOpen, onClose }) => {
                                     <img src={item.imagen} alt={item.nombre} className="cart__image" />
                                     <div className="cart__details">
                                         <h3 className="cart__name">{item.nombre}</h3>
-                                        <p className="cart-price">${item.precio.toFixed(3)}</p>
+                                        <p className="cart-price">${item.precio.toLocaleString('es-CO')}</p>
                                         <div className="cart__quantity" data-quantity={item.quantity}>
                                             {/* Botón para reducir cantidad */}
                                             {item.quantity > 1 ? (
@@ -105,7 +105,7 @@ const CartModal = ({ isOpen, onClose }) => {
                             ))}
                         </ul>
                         <div className="cart__subtotal">
-                            <h3>Subtotal: ${subtotal.toFixed(3)}</h3>
+                            <h3>Subtotal: ${subtotal.toLocaleString('es-CO')}</h3>
                         </div>
                         <button
                             className="cart__checkout"

@@ -150,7 +150,7 @@ const AllProducts = () => {
                                         />
                                     </Link>
                                     <h4 className='allproducts-product__title'>{producto.nombre}</h4>
-                                    <p className='allproducts-product__price'>${producto.precio.toFixed(3)} COP</p>
+                                    <p className='allproducts-product__price'>${producto.precio.toLocaleString('es-CO')} COP</p>
                                     <button 
                                         className='allproducts-add-to-cart__button'
                                         onClick={() => addToCart(producto, 1)} // Cambia a 1 como cantidad por defecto

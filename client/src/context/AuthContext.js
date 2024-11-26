@@ -4,21 +4,17 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-// Crear un contexto de autenticación
 export const AuthContext = createContext();
 
-// Custom hook para acceder al contexto
 export const useAuth = () => {
     return useContext(AuthContext);
 };
 
-// Proveedor del contexto de autenticación
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Función para mostrar notificaciones
     const showToast = useCallback((message, type) => {
         const currentTime = Date.now();
         if (!showToast.lastToast || currentTime - showToast.lastToast >= 5000) {
@@ -39,7 +35,6 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    // Manejo de token inválido
     const handleInvalidToken = () => {
         console.log("Token inválido o expirado");
         localStorage.removeItem("token");
@@ -48,7 +43,6 @@ export const AuthProvider = ({ children }) => {
         navigate("/Iniciar-Sesion");
     };
 
-    // Función para obtener los datos del usuario
     const fetchUserData = async () => {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -75,22 +69,20 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Efecto para verificar los datos del usuario al cargar la aplicación
     useEffect(() => {
-        fetchUserData();
+        fetchUserData(); // Verifica el usuario al cargar la app
     }, []);
 
-    // Función para el login
     const handleLogin = async (correo, contrasena) => {
         setLoading(true);
         try {
             const data = await AuthService.login(correo, contrasena);
             if (data.token) {
                 console.log("Inicio de sesión exitoso:", data.user);
-                localStorage.setItem("token", data.token); // Guarda el token
+                localStorage.setItem("token", data.token); // Solo guarda el token
                 await fetchUserData(); // Obtiene la información actualizada del usuario
                 showToast("Inicio de sesión exitoso!", "success");
-                navigate("/"); // Redirige a la página de inicio
+                navigate("/");
             } else {
                 showToast("No se encontró el token en la respuesta.", "error");
             }
@@ -102,7 +94,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Función para el registro
     const handleRegister = async (nombre, apellido, correo, contrasena, fecha_nacimiento, telefono) => {
         setLoading(true);
         try {
@@ -122,27 +113,24 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Función para el logout
     const handleLogout = async () => {
         setLoading(true);
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                // Llama a invalidateToken para invalidar el token en el servidor
-                await AuthService.invalidateToken(token); 
+                await AuthService.invalidateToken(token);
                 console.log("Token invalidado con éxito");
             } catch (err) {
                 console.error("Error al invalidar el token:", err);
                 showToast("Error al cerrar sesión. Inténtalo de nuevo.", "error");
             }
         }
-    
-        // Elimina el token del almacenamiento local y realiza logout
+
         localStorage.removeItem("token");
-        setUser(null); // Elimina el usuario del estado
-        navigate("/Iniciar-Sesion"); // Redirige al login
+        setUser(null);
+        navigate("/Iniciar-Sesion");
         setLoading(false);
-    };    
+    };
 
     return (
         <AuthContext.Provider
@@ -154,7 +142,7 @@ export const AuthProvider = ({ children }) => {
                 handleRegister,
                 fetchUserData,
                 loading,
-                showToast
+                token: localStorage.getItem("token"),
             }}
         >
             {children}

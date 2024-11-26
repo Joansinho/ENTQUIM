@@ -46,6 +46,10 @@ import homeSelected from '../../assets/icons/home-selected.png';
 import homeUnselected from '../../assets/icons/home-unselected.png';
 import soldSelected from '../../assets/icons/solds-selected.png';
 import soldUnselected from '../../assets/icons/solds-unselected.png';
+import productsSelected from '../../assets/icons/products-selected.png';
+import productsUnselected from '../../assets/icons/products-unselected.png';
+import usersSelected from '../../assets/icons/users-selected.png';
+import usersUnselected from '../../assets/icons/users-unselected.png';
 import reportSelected from '../../assets/icons/reports-selected.png';
 import reportUnselected from '../../assets/icons/reports-unselected.png';
 import more from '../../assets/icons/more.png';
@@ -58,6 +62,8 @@ import unactiveDelete from '../../assets/icons/unactive-delete.png';
 import addCart from '../../assets/icons/green-add-cart.png';
 import redLogout from '../../assets/icons/red-logout.png';
 import Delete from '../../assets/icons/delete.png';
+import blackFilter from '../../assets/icons/black-filter.png';
+
 
 const Images = {
     plagues: {
@@ -108,7 +114,12 @@ const Images = {
         unactiveDelete: unactiveDelete,
         greenaddcart: addCart,
         redlogout: redLogout,
-        delete: Delete
+        delete: Delete,
+        productsselected: productsSelected,
+        productsunselected: productsUnselected,
+        usersselected: usersSelected,
+        usersunselected: usersUnselected,
+        blackfilter: blackFilter
     },
     homeCarousel: {
         img1: img1Carousel,
