@@ -58,14 +58,13 @@ const Products = () => {
 
             <div className='product-main__container'>
                 <div className='products-main__container'>
-                    <h2 className='products-main__title'>{categoriaTitulo}</h2>
-
                     <div className="category-selection">
-                        <label htmlFor="categoria">Seleccionar categoría:</label>
-                        <select 
+                        <h2 className='products-main__title'>{categoriaTitulo}</h2>
+                    <select 
                             id="categoria" 
                             value={categoriaSeleccionada} 
                             onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+                            className='category-product-selection'
                         >
                             <option value="">Todas</option>
                             {Object.entries(categorias).map(([id, nombre]) => (

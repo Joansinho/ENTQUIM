@@ -103,8 +103,9 @@
 }
 
 .sales-history {
-  width: 750px;
-  margin: 0 auto;
+  min-width: 750px;
+  width: 100%;
+  margin: 0 20px;
 }
 
 .sales-history.solds {

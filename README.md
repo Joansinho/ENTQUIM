@@ -55,7 +55,7 @@ Abrir un cmd y ejecutar lo siguiente:
 mysql -u root -p
 use dbentquim
 CREATE USER 'adminentquim'@'localhost' IDENTIFIED BY 'entquim123';
-GRANT ALL PRIVILEGES ON dbentquim. * TO 'adminentquim'@'localhost';
+GRANT ALL PRIVILEGES ON dbentquim.* TO 'adminentquim'@'localhost';
 FLUSH PRIVILEGES;
 exit;
 (se puede crear un usuario con cualquier nombre y contraseña, es recomendable crear este.)
