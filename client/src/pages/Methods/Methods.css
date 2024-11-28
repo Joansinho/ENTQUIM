@@ -1,0 +1,168 @@
+.account-payment {
+  height: 100vh;
+  margin-left: 270px;
+}
+
+.payment-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0px 20px;
+}
+
+.payment-page {
+  width: 100%;
+  background-color: #fff;
+}
+
+.payment-methods {
+  margin-bottom: 30px;
+  padding: 15px 20px;
+}
+
+.payment-methods-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.methods-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Limita a 2 columnas */
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+.card-method {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #1A729A25;
+  border-radius: 8px;
+  padding: 10px 25px;
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+.card-type {
+  border: 1px solid #1A729A50;
+  border-radius: 4px;
+  padding: 10px 15px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.card-info {
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.card-info p {
+  margin: 5px 0;
+}
+
+.card-actions button {
+  background: none;
+  border: none;
+  color: #a50808;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.card-actions {
+  padding-bottom: 15px;
+  margin-left: auto; /* Empuja el botón a la derecha dentro del contenedor */
+  display: flex; /* Asegura que se alinee correctamente si hay más de un elemento */
+}
+
+.add-method {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #1A729A50;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.payment-content {
+  display: none;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-bar button {
+  background: #007BFF;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  margin-left: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.payment-list h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #555;
+}
+
+.payment-item {
+  background: #f3f3f3;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  min-height: 100px;
+}
+
+.actions-menu {
+  position: absolute;
+  top: 50px;
+  right: 25px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+  z-index: 1000;
+}
+
+
+.actions-menu button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+
+.actions-menu button:hover {
+  background: #f0f0f0;
+}

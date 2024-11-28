@@ -1,0 +1,62 @@
+/* Modal Overlay */
+.user-detail-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.user-detail-modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Close Button */
+.user-detail-modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Title */
+.user-detail-modal-title {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    color: #333;
+}
+
+/* User Information */
+.user-detail-modal-info {
+    font-size: 1em;
+    color: #333;
+}
+
+.user-detail-modal-info p {
+    margin: 8px 0;
+}
+
+.user-detail-modal-info strong {
+    color: #1A729A; /* Accent color for labels */
+}
+
+/* Loading Text */
+.user-detail-modal-info p {
+    color: #999;
+}

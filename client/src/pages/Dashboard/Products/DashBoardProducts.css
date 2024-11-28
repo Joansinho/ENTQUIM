@@ -1,0 +1,114 @@
+.management-products {
+    background-color: #fcfcfc;
+}
+
+.management-products-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.register-user-button {
+    width: 100%;
+    height: 30px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #1a719a25;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.5s, transform 0.5s, color 0.5s;
+}
+
+.register-user-button:hover {
+  background-color: #1a719a05;
+  transform: scale(0.95);
+  box-shadow: 0 0 20px 10px #1a719a05;
+}
+
+.sales-history.products {
+    margin-top: 20px;
+}
+
+.dashboard-more-details {
+  border: none;
+  background-color: transparent;
+  color: #31a6dd;
+  cursor: pointer;
+}
+
+  .inventory-control {
+    display: none;
+    justify-content: space-between;
+  }
+  
+   .inventory-history, .low-stock {
+    padding: 20px;
+    width: 50%;
+  } 
+  
+  .history-box, .low-stock-box {
+    border: 1px solid #1a719a25;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  .date-selector__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .date-selector__container div {
+    display: flex;
+    gap: 5px;
+  }
+
+  .history-box-title {
+    font-weight: 500;
+    color: #4E4E4E;
+  }
+
+  .history-box-date {
+    color: #4E4E4E;
+  }
+
+  .date-selector {
+    border: 1px solid #1a719a41;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 50px;
+    height: 20px;
+    text-align: center;
+    margin-right: 5px;
+    color: #7b8a8c;
+    overflow: hidden; /* Asegura que el contenido respete el borde redondeado */
+  }
+
+  .date-selector button {
+    background-color: #EDF2F7;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .low-stock-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  
+  .total-stock {
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  
+  

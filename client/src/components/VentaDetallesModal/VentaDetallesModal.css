@@ -1,0 +1,79 @@
+.venta-detalles-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .venta-detalles-modal-container {
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .venta-detalles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a729a;
+    color: #fff;
+    padding: 16px;
+  }
+  
+  .venta-detalles-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .venta-detalles-body {
+    padding: 16px;
+  }
+  
+  .venta-detalles-productos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+  
+  .venta-detalles-productos th,
+  .venta-detalles-productos td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .venta-detalles-productos th {
+    background-color: #f4f4f4;
+  }
+  
+  .venta-detalles-loading,
+  .venta-detalles-error {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 16px 0;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

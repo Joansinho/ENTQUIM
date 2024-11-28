@@ -1,0 +1,287 @@
+.main-management-home {
+  margin-left: 300px;
+}
+
+.main-management-home-title {
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.management-solds-container {
+  display: flex;
+}
+
+.filter-section {
+  width: 250px;
+  margin-top: 20px;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-icon {
+  width: 25px;
+}
+
+.filter-title {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.filter-options {
+  background-color: #fff;
+  margin-top: 15px;
+  border: 1px solid #1a719a25;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+.filter-status-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #4E4E4E;
+}
+
+.filter-status {
+  margin-top: 15px;
+}
+
+.filter-options ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.filter-options ul li {
+  margin: 5px 0;
+}
+
+.input-range {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 50px;
+}
+
+.input-range input {
+  border: 1px solid #1a719a41;
+  border-radius: 5px;
+  padding: 5px 10px;
+  width: 50px;
+  height: 20px;
+  text-align: center;
+  margin-right: 5px;
+  color: #7b8a8c;
+  overflow: hidden; /* Asegura que el contenido respete el borde redondeado */
+}
+
+.input-max {
+  margin-left: 5px;
+}
+
+.input-range input::placeholder {
+  color: #7b8a8c;
+  font-size: 12px;
+}
+
+.input-range span {
+  color: #7b8a8c;
+  font-size: 1.2rem;
+}
+
+.filter-status {
+  font-size: 1rem;
+  color: #333; /* Color del texto de rango */
+}
+
+.filter-options p {
+  margin: 0;
+  color: #333;
+}
+
+.sales-history {
+  min-width: 750px;
+  width: 100%;
+  margin: 0 20px;
+}
+
+.sales-history.solds {
+  margin-top: 60px;
+}
+
+.sales-history-table {
+  width: 100%;
+  border-collapse: separate; /* Separa los bordes para que border-radius funcione */
+  border-spacing: 0; /* Elimina el espacio entre celdas */
+  overflow: hidden;
+  border: 1px solid #1a719a25;
+  border-radius: 5px; /* Border-radius ahora debería funcionar */
+}
+
+.sales-history-table th, 
+.sales-history-table td {
+  padding: 10px 15px;
+  text-align: left;
+  font-size: 14px;
+  text-align: center;
+}
+
+.sales-history-table th:first-child {
+  border-top-left-radius: 5px; /* Bordes redondeados superiores */
+}
+
+.sales-history-table th:last-child {
+  border-top-right-radius: 5px; /* Bordes redondeados superiores */
+}
+
+.sales-history-table th {
+  background-color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+  text-align: left;
+  border-bottom: 2px solid #eaeaea;
+  text-align: center;
+}
+
+.sales-history-table tbody {
+  background-color: #fff;
+}
+
+.sales-history-table td a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.sales-history-table td a:hover {
+  text-decoration: underline;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status.approved {
+  background-color: #e6f4ea;
+  color: #34a853;
+}
+
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.pagination-controls button {
+  border: none;
+  background-color: transparent;
+  color: #1a73e8;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.pagination-controls button:hover {
+  background-color: #eaeaea;
+  border-radius: 5px;
+}
+
+.pagination-input {
+  display: flex;
+  gap: 15px;
+
+}
+
+.pagination-input input {
+  width: 50px;
+  height: 20px;
+  border: 1px solid #1a719a25;
+  border-radius: 5px;
+  overflow: hidden; /* Para asegurarse de que el contenido respete el border-radius */
+  text-align: center;
+}
+
+.pagination-controls span {
+  margin-right: auto;
+}
+
+.pagination-button__container {
+  display: flex;
+  gap: 15px;
+}
+
+.pagination-number {
+  display: flex;
+  gap: 10px;
+}
+
+.pagination-button__container button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #7B8496;
+}
+
+/* New styles for statistics section */
+.statistics-section {
+  display: none;
+  margin-top: 50px;
+}
+
+.statistics-container {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.statistics-solds-card {
+  width: 45%;
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid#1a719a25;
+  border-radius: 5px;
+}
+
+.statistics-comparison {
+  width: 55%;
+}
+
+.statistics-comparision__container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.statistics-box {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #1a719a25;
+  width: 250px;
+}
+
+.growth-info {
+  margin-top: 20px;
+}
+
+.growth-positive {
+  color: green;
+}

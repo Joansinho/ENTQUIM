@@ -1,0 +1,40 @@
+.users-management {
+    background-color: #fcfcfc;
+    height: 100vh;
+}
+
+.statistics-users-container {
+    gap: 20px;
+    width: 100%;
+    display: none;
+}
+
+.growth-users-rate {
+    width:40%;
+    background-color: #fff;
+    border: 1px solid #1a719a25;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.stat-card {
+    background-color: #fff;
+    border: 1px solid #1a719a25;
+    border-radius: 5px;
+}
+
+.stats-row {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-card.new-users, .stat-card.page-time {
+    width: 150px;
+    height: 120px;
+}
+
+.stat-card.active-users, .stat-card.visited-products {
+    width: 425px;
+    height: 120px;
+}

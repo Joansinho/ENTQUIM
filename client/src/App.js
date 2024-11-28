@@ -11,6 +11,47 @@ import Products from './pages/Products/Products';
 import Contact from './pages/Contact/Contact';
 import Login from './pages/Login/Login';
 import AllProducts from './pages/AllProducts/AllProducts';
+<<<<<<< Updated upstream
+=======
+import AccountInfo from './pages/Account/Account';
+import Methods from './pages/Methods/Methods';
+import Orders from './pages/Orders/Orders';
+import AddMethodForm from './pages/AddMethodForm/AddMethodForm';
+import CartPage from './pages/CartPage/CartPage';
+
+import DashBoardHome from './pages/Dashboard/Home/DashBoardHome';
+import DashBoardSolds from './pages/Dashboard/Solds/DashBoardSolds';
+import DashBoardProducts from './pages/Dashboard/Products/DashBoardProducts';
+import DashboardUsers from './pages/Dashboard/Users/DashBoardUsers';
+
+import AddProduct from './pages/AddProduct/AddProduct';
+import AddUser from './pages/AddUser/AddUser';
+
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+
+// Componente para manejar la barra de carga
+function LoadingBarWrapper({ children }) {
+    const loadingBarRef = useRef(null);
+    const location = useLocation();
+
+    useEffect(() => {
+        if (loadingBarRef.current) {
+            loadingBarRef.current.continuousStart();
+            setTimeout(() => {
+                loadingBarRef.current.complete();
+            }, 800); // Tiempo ajustable
+        }
+    }, [location]);
+
+    return (
+        <>
+            <TopLoadingBar color="#1A729A" ref={loadingBarRef} shadow={true} />
+            {children}
+        </>
+    );
+}
+>>>>>>> Stashed changes
 
 function App() {
     return (
@@ -33,6 +74,7 @@ function App() {
                         </>
                     }/>
 
+<<<<<<< Updated upstream
                     <Route path='/Productos' exact element={
                         <>
                         <Layout>
@@ -65,6 +107,14 @@ function App() {
                         </>
                     }/>
                 </Routes>
+=======
+                            <Route path='/dashboard/productos/nuevo-producto' exact element={<ManagementLayout><AddProduct /></ManagementLayout>} />
+                            <Route path='/dashboard/usuarios/nuevo-usuario' exact element={<ManagementLayout><AddUser/></ManagementLayout>} />
+                        </Routes>
+                    </LoadingBarWrapper>
+                </CartProvider>
+            </AuthProvider>
+>>>>>>> Stashed changes
         </Router>
     );
 }
